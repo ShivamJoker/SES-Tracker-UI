@@ -1,21 +1,57 @@
-import { useLocation } from "@solidjs/router";
+import { redirect, useLocation } from "@solidjs/router";
+import { Show } from "solid-js";
+
+import * as auth from "aws-amplify/auth";
+import { setIsLoggedIn, isLoggedIn } from "~/app";
+import { effect } from "solid-js/web";
 
 export default function Nav() {
   const location = useLocation();
-  const active = (path: string) =>
-    path == location.pathname
-      ? "border-sky-600"
-      : "border-transparent hover:border-sky-600";
+
+  effect(() => {
+    console.log(isLoggedIn());
+  });
+
+  const active = (path: string) => (path == location.pathname ? "active" : "");
+
   return (
-    <nav class="bg-sky-800">
-      <ul class="container flex items-center p-3 text-gray-200">
-        <li class={`border-b-2 ${active("/")} mx-1.5 sm:mx-6`}>
-          <a href="/">Home</a>
+    <nav class="">
+      <ul class="">
+        <li class={active("/dashboard")}>
+          <a href="/dashboard">Dashboard</a>
         </li>
-        <li class={`border-b-2 ${active("/about")} mx-1.5 sm:mx-6`}>
-          <a href="/about">About</a>
+        <li class={active("/events")}>
+          <a href="/events">Events</a>
+        </li>
+
+        <li class={active("/suppression")}>
+          <a href="/suppression">Suppression List</a>
+        </li>
+
+        <li class={active("/new-mail")}>
+          <a href="/new-mail">New Email</a>
+        </li>
+        <li class={active("/settings/account")}>
+          <a href="/settings/account">AWS Settings</a>
         </li>
       </ul>
+
+      <Show when={true}>
+        <div class="bottom-2 absolute right-0 left-0 p-4">
+          <button
+            class="bg-gray-600 text-white"
+            onClick={async () => {
+              await auth.signOut();
+
+              console.log("logout");
+              redirect("/login");
+              setIsLoggedIn(false);
+            }}
+          >
+            Log out
+          </button>
+        </div>
+      </Show>
     </nav>
   );
 }
