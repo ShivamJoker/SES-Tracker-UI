@@ -1,44 +1,25 @@
 import { A } from "@solidjs/router";
+import { onMount, Show } from "solid-js";
 import Counter from "~/components/Counter";
+import OtpFieldInput from "~/components/OtpFieldInput";
+
+import * as auth from "aws-amplify/auth";
+import { isLoggedIn } from "~/app";
+import { API } from "~/utils/api";
 
 export default function Home() {
+  onMount(async () => {
+    /*    await auth.updateUserAttribute({
+      userAttribute: {
+        attributeKey: "custom:aws_account_id",
+        value: "205979422636",
+      },
+    }); */
+  });
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
-      <h1 class="max-6-xs text-6xl text-sky-700 font-thin uppercase my-16">
-        <div class="flex justify-center items-center">
-          <span class="mr-5">Hello</span> <img class="w-12 h-12" src="https://unocss.dev/logo.svg" alt="UnoCSS logo" />!
-        </div>
-      </h1>
-      <Counter />
-      <p class="mt-8">
-        Visit{" "}
-        <a
-          href="https://solidjs.com"
-          target="_blank"
-          class="text-sky-600 hover:underline"
-        >
-          solidjs.com
-        </a>{" "}
-        to learn how to build Solid apps.
-      </p>
-      <p class="mt-2">
-        Visit{" "}
-        <a
-          href="https://unocss.dev"
-          target="_blank"
-          class="text-sky-600 hover:underline"
-        >
-          unocss.dev
-        </a>{" "}
-        to learn how to style your app.
-      </p>
-      <p class="my-4">
-        <span>Home</span>
-        {" - "}
-        <A href="/about" class="text-sky-600 hover:underline">
-          About Page
-        </A>{" "}
-      </p>
+      <h1>Hello there</h1>
+      <OtpFieldInput />
     </main>
   );
 }
