@@ -8,6 +8,7 @@ export default createHandler(() => (
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>SES Events Tracker - Track your SES events</title>
           <link rel="icon" href="/favicon.ico" />
           {assets}
         </head>
