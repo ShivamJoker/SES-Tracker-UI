@@ -12,6 +12,7 @@ import * as auth from "aws-amplify/auth";
 import { nanoid } from "nanoid";
 import { effect } from "solid-js/web";
 import { API } from "~/utils/api";
+import Button from "~/components/Button";
 
 const Login = () => {
   const isRouting = useIsRouting();
@@ -55,6 +56,8 @@ const Login = () => {
         userAttributes: { ...customAttr },
       });
       await auth.fetchAuthSession({ forceRefresh: true });
+      await validateCreds();
+      toast.success("Updated & Verified your AWS credentials sucessfully.");
     } catch (err) {
       const error = err as Error;
       console.log(error);
@@ -69,9 +72,10 @@ Error: ${error.message}`,
 
   const validateCreds = async () => {
     const res = await auth.fetchAuthSession();
-    API.auth(`Bearer ${res.tokens?.accessToken.toString()}`)
+    await API.auth(`Bearer ${res.tokens?.accessToken.toString()}`)
       .url("/verify-sts")
-      .get();
+      .get()
+      .res();
   };
 
   return (
@@ -120,12 +124,13 @@ Error: ${error.message}`,
             />
 
             <div>
-              <button type="submit" disabled={isLoading()}>
-                {isLoading() ? "Updating ..." : "Update"}
-              </button>
+              <Button
+                title="Update & Verify"
+                type="submit"
+                isLoading={isLoading()}
+              />
             </div>
           </form>
-          <button onClick={validateCreds}>Validate & Connect Account</button>
         </div>
       </div>
     </>

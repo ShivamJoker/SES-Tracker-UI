@@ -3,7 +3,7 @@ import UnoCSS from "unocss/vite";
 
 export default defineConfig({
   server: {
-    prerender: {
+    /* prerender: {
       crawlLinks: true,
       routes: [
         "/",
@@ -14,7 +14,7 @@ export default defineConfig({
         "/events",
         "/supression",
       ],
-    },
+    }, */
   },
   vite: {
     plugins: [UnoCSS()],
