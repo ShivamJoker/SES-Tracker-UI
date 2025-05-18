@@ -57,7 +57,7 @@ const NewMail = () => {
   return (
     <section>
       <form onSubmit={handleSubmit} class="w-[700px] p-2 flex flex-col gap-2">
-        <div></div>
+        <h1>Send a New Email with SES</h1>
         <Input
           label="From Email"
           name="from"

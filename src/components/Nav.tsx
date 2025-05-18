@@ -1,16 +1,13 @@
-import { redirect, useLocation } from "@solidjs/router";
-import { Show } from "solid-js";
+import { redirect, useLocation, useNavigate } from "@solidjs/router";
+import { createSignal, Show } from "solid-js";
 
 import * as auth from "aws-amplify/auth";
-import { setIsLoggedIn, isLoggedIn } from "~/app";
-import { effect } from "solid-js/web";
+import Button from "./Button";
 
 export default function Nav() {
   const location = useLocation();
-
-  effect(() => {
-    console.log(isLoggedIn());
-  });
+  const navigate = useNavigate();
+  const [isLoggingOut, setIsLogginOut] = createSignal(false);
 
   const active = (path: string) => (path == location.pathname ? "active" : "");
 
@@ -36,22 +33,19 @@ export default function Nav() {
         </li>
       </ul>
 
-      <Show when={true}>
-        <div class="bottom-2 absolute right-0 left-0 p-4">
-          <button
-            class="bg-gray-600 text-white"
-            onClick={async () => {
-              await auth.signOut();
-
-              console.log("logout");
-              redirect("/login");
-              setIsLoggedIn(false);
-            }}
-          >
-            Log out
-          </button>
-        </div>
-      </Show>
+      <div class="bottom-2 absolute right-0 left-0 p-4">
+        <Button
+          isLoading={isLoggingOut()}
+          class="bg-gray-600 text-white"
+          onClick={async () => {
+            setIsLogginOut(true);
+            await auth.signOut();
+            setIsLogginOut(false);
+            navigate("/login");
+          }}
+          title="Log out"
+        />
+      </div>
     </nav>
   );
 }

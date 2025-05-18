@@ -37,7 +37,7 @@ const Supression = () => {
       const api = await getAPIWithAuth();
 
       const res = await api
-        .url("/supression-list")
+        .url("/suppression-list")
         .get()
         .json<SupressionListRes>();
 
@@ -63,6 +63,11 @@ const Supression = () => {
 
   return (
     <section class="">
+      <h1>Supressed Users / Emails</h1>
+      <p>
+        It's a list that you maintain from your side, to prevent sending
+        unsolicited emails.
+      </p>
       <div class="flex gap-2 ml-auto">
         <div>
           <label for="from">From:</label>

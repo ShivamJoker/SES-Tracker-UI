@@ -9,11 +9,11 @@ import {
   useSearchParams,
 } from "@solidjs/router";
 import * as auth from "aws-amplify/auth";
+import Button from "~/components/Button";
 
 const Login = () => {
   const isRouting = useIsRouting();
   const [searchParams] = useSearchParams<LoginSearchParam>();
-  const { email, password, reset, redirectTo } = searchParams;
 
   const [isLoading, setIsLoading] = createSignal(false);
   const [requiresOtp, setRequiresOtp] = createSignal(false);
@@ -38,7 +38,6 @@ const Login = () => {
           throw Error("No OTP provided");
         }
         await auth.confirmSignUp({ username: email, confirmationCode: otp });
-        setIsLoggedIn(true);
         return;
       }
 
@@ -72,7 +71,7 @@ Error: ${error.message}`,
 
   return (
     <>
-      <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div class="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 class="mt-10 text-center text-xl font-bold tracking-tight text-gray-900">
             Create your Amazon SES Tracker Account
@@ -85,7 +84,6 @@ Error: ${error.message}`,
               label="Email address"
               name="email"
               type="email"
-              value={email ?? ""}
               autocomplete="email"
               required
               placeholder="ethan@hunt.io"
@@ -98,10 +96,8 @@ Error: ${error.message}`,
               type="password"
               autocomplete="current-password"
               placeholder="Your password"
-              value={password ?? ""}
               disabled={requiresOtp()}
               required
-              class="block mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
 
             <Show when={requiresOtp()}>
@@ -115,23 +111,17 @@ Error: ${error.message}`,
             </Show>
 
             <div>
-              <button
+              <Button
+                isLoading={isLoading()}
                 type="submit"
-                class="flex mt-6 w-full justify-center rounded-md bg-yellow-400 px-3 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-amber-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 whitespace-pre-wrap"
-              >
-                {isRouting() || isLoading() ? "Loading ..." : "Create Account"}
-              </button>
+                class=""
+                title="Create account"
+              />
             </div>
           </form>
 
           <p class="mt-10 text-center text-sm text-gray-500">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              class="font-semibold leading-6 text-blue-600 hover:text-blue-500"
-            >
-              Login
-            </a>
+            Already have an account? <a href="/login">Login</a>
           </p>
         </div>
       </div>

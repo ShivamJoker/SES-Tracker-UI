@@ -54,11 +54,10 @@ const Events = () => {
     <section class="">
       <h1>Your SES Email Activity</h1>
       <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veritatis
-        molestiae quam ipsam et quisquam incidunt sint in provident cupiditate
-        rem odio velit iure culpa non esse, optio architecto aliquam? Quod.
+        Try filtering by status (opened, clicked), or by date for granular
+        results. Just enter your preferred date and time, and start
+        investigating!
       </p>
-      <p>Try filtering by date for granular results!</p>
       <div class="flex gap-2 ml-auto">
         <div>
           <label for="from">From:</label>

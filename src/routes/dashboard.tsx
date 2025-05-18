@@ -137,13 +137,20 @@ const Dashboard = () => {
   return (
     <section class="w-[800px]">
       <h1>Planning to send some emails today?</h1>
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo
-      ratione tenetur harum sed odit dolor distinctio facilis sint nesciunt
-      amet, asperiores nostrum corrupti, doloribus officia tempore! Aut quis
-      culpa rem?
-      <div class="max-w-[200px] mt-4">
+      <p>
+        It's always a good day for sending emails. More emails, more visibility.
+        <br />
+        "I don't want more visibility", said no one ever.
+        <br />1 - Who you are sending to, 2 - The subject, 3 - Something in the
+        body
+      </p>
+      <p>
+        So, send that email you have been whipping up. It's as smooth as 1, 2,
+        3.
+      </p>
+      <div class="max-w-[130px] mt-4">
         <a href="/new-mail">
-          <button>Send Now</button>
+          <button>Send Now {"  "}&rarr;</button>
         </a>
       </div>
       <h2 class="my-4">Events from past week</h2>
