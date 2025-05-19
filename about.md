@@ -9,14 +9,47 @@ But you never get to know exactly:
 - which email recipients out of the bulk opened your email
 - which recipient complained / reported your email as spam
 
-![who opened my email 7 times](https://github.com/user-attachments/assets/e32eeff1-3e1c-404f-8554-29ef36eabe1f)
+<img alt="Who opened my email, but cat version" src="https://github.com/user-attachments/assets/3839f35d-717d-470f-b2d9-a433481cb166" height="400px">
+
+SES helps you:
+- send emails (did we mention, for dirt cheap?)
+- list templates that you have created
+- check your sending statistics (not detailed)
 
 SES is great for sending emails in bulk via API calls, maintaining a great reputation while you're at it.
 
-But the ones we just mentioned?
-These are features we all were quite missing, and so we decided to use AWS features to make it happen.
+## The catch?
+
+SES doesn't have any interface where you can:
+- send an email
+- keep a custom suppression list
+- track individual email events (e.g. which link was clicked?)
+
+<img alt="Link Tracking in emails" src="https://github.com/user-attachments/assets/68a03328-631d-4120-bd3d-5270ca8e054d" height="350px">
+
+These are features we all were quite missing (and what every SES user secretly wanted), and so we decided to use AWS services to make it happen, all event-driven.
 
 ![ses-account-dashboard-metrics](https://github.com/user-attachments/assets/d58b7283-9040-45ad-b324-7d64a8c6f2af)
+
+## Our motivation for building this
+
+For everyone who uses SES, SESami would make filtering emails by date-time, and drilling down via statuses; a tad bit easier.\
+We had two options:
+
+<img alt="the road not taken app meme" src="https://github.com/user-attachments/assets/e1560ca9-34d3-472d-9d80-a3b24d863395" height="300px">
+
+This is a multi-tenant app, which means you can have multiple users and AWS accounts.
+
+Here's an example where our app filters out the `DELIVERED` events by date and time, all sorted in descending order:
+
+![Filtering delivered events](https://github.com/user-attachments/assets/9333928f-e2bb-4123-8ea8-991a56367c45)
+
+It only needs 3 things from the user:
+- AWS account ID
+- IAM Role ARN
+- STS External ID (we'll supply this from our end)
+
+![AWS Settings](https://github.com/user-attachments/assets/0cfa1955-1bc0-4038-b3dc-3dc97c75efc5)
 
 ## Tech Stack
 ### Frontend
@@ -38,6 +71,23 @@ These are features we all were quite missing, and so we decided to use AWS featu
 - [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
 - [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/)
 - [Amazon Cognito](https://aws.amazon.com/cognito/)
+
+## Our initial implementation
+Starting out, this is all we had in [Excalidraw](https://excalidraw.com/), when it came to designing UI &darr;
+
+![Excalidraw initial design](https://github.com/user-attachments/assets/6641829e-facb-42f2-99a7-3c8fc94c2d2f)
+
+We had to implement:
+| Feature       | Situation     |
+| ------------- | ------------- |
+| a custom suppression list | <img alt="suppression-list-card-meme" src="https://github.com/user-attachments/assets/55c4078d-89c0-4e11-a297-ae91f57c1cf9" height="200px"> |
+| event tracking | <img alt="who opened my email 7 times" src="https://github.com/user-attachments/assets/e32eeff1-3e1c-404f-8554-29ef36eabe1f" height="200px"> |
+
+We needed to know exactly who, when and why our emails were opened.
+
+- **Who?** thatguy@email.com
+- **When?** 18/5/2025, 11:55:23 pm
+- **Why?** Impossible to know, unless AI starts reading minds.
 
 ## Use of Momento Cache
 We assume the role, and then we get the token of AWS credentials from STS for the source account (which we are using to send emails).
@@ -99,7 +149,7 @@ In order to use SESami (SES Email Tracker), first you need to have your SES enab
 - Source / customer account: Creates IAM role with Trust Policy to allow our AWS account to access SES (Least Privilege Principle)
 ![IAM permissions meme](https://github.com/user-attachments/assets/c4fe947d-baaa-48c3-b1d1-b751d5eb9ce3)
 
-- To use SES API, the source account call our SES API proxy
+- To use SES API, the source account calls our SES API proxy
 	- We get the token validated
 	- The resource based policy in our AWS account allows the specified account to send events to our bus directly, as it is attached to our AWS Event bus
 - EventBridge rule
@@ -107,6 +157,7 @@ In order to use SESami (SES Email Tracker), first you need to have your SES enab
 	- External ID
 - sts:AssumeRole (1 hour by default)
 
+Here's a flow diagram to better explain what's happening under the hood:
 ```mermaid
 graph TD
  A(SES Configuration Set) --> B(All SES events are selected there)
@@ -117,24 +168,67 @@ graph TD
 
 We send emails on behalf of them (the customer or source account) and do suppression checks, and we'll also be logging the email content in future.
 
-## Creating an Amazon EventBridge rule
+We can't keep sending emails to users who keep reporting us as spam.\
+Otherwise, this happens &darr;
 
+![ses-sending-paused-gta-meme](https://github.com/user-attachments/assets/a1fbf5c8-3158-40d4-99ee-7ce69fb67a08)
+
+
+### Creating an Amazon EventBridge rule
+#### Define rule detail
+- First we go to Amazon EventBridge &rarr; Rules &rarr; Create rule
+- We give it a name, and select `default` from the **Event bus** dropdown
+- We enable the toggle for the rule on selected event bus
+- We select **Rule with an event pattern** in **Rule detail** and click Next
 
 ![1. Define rule detail in Amazon EventBridge](https://github.com/user-attachments/assets/e5bb8297-a7d8-4543-b4f7-b9ad3e8e39ee)
 
-
+#### Build event pattern
+- In **Creation method**, we select **Use pattern form**
+- In **Event source**, we select **AWS Services**
+- In **AWS Service**, we select **Simple Email Service (SES)**
+- In **Event type**, we select **All Events**, and click Next
 ![2. Build event pattern](https://github.com/user-attachments/assets/b0b1fd16-7890-4f74-9acf-b4c56c1db52a)
 
+#### Select target(s)
+- We select **EventBridge event bus** as target
+- In **Target types**, we select **Event bus in a different account or Region**
+- We put the recently created ses-event-bus's ARN in **Event bus as target**
+- In **Execution role**, we chose to **Create a new role for this specific resource**
+- We leave the role name as-is, and click Next
 
 ![3. Select targets](https://github.com/user-attachments/assets/7da41096-74f0-4555-b53c-677a57bed2f9)
 
-We updated our external ID in IAM Role SES-RBAC -> Trust Relationships
+We update our external ID in IAM &arr; Role &rarr; SES-RBAC &rarr; Trust Relationships
 
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::205979422636:role/AWSMailSES"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+                "StringEquals": {
+                    "sts:ExternalId": "TgkeVMykC5ePaij8oV0gV"
+                }
+            }
+        }
+    ]
+}
+```
+####
 ![Trust relationships in IAM Roles](https://github.com/user-attachments/assets/999d4d0d-43a6-4ac0-943d-a9b70b1f7d57)
 
 We add an identity:
 
 ![Add an email address identity](https://github.com/user-attachments/assets/809b985e-ffa2-4a0c-83a1-d44d37b2f3b7)
+
+Now we are all set to allowing our AWS account to send emails on behalf of the customer's SES account!
 
 ## Future Scope
 
@@ -149,4 +243,3 @@ We add an identity:
 - Filtering by email address of users
 - Allow suppression list to be modified (adding, editing, deleting user email addresses)
 - Sync suppression list with AWS (to ensure non-deliverability of emails for suppressed users)
-- 
