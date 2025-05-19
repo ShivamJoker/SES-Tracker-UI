@@ -230,6 +230,9 @@ We add an identity:
 
 Now we are all set to allowing our AWS account to send emails on behalf of the customer's SES account!
 
+![send new email](https://github.com/user-attachments/assets/2a9645e1-03e6-443e-941f-58986a52bcec)
+
+
 ## Future Scope
 
 - Subscription Management
