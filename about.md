@@ -20,24 +20,24 @@ These are features we all were quite missing, and so we decided to use AWS featu
 
 ## Tech Stack
 ### Frontend
-- SolidJS
-- SolidStart (meta framework)
-- AWS Amplify
-- TypeScript
-- ChartJS
+- [SolidJS](https://www.solidjs.com/)
+- [SolidStart](https://start.solidjs.com/) (meta framework)
+- [AWS Amplify](https://aws.amazon.com/amplify/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [ChartJS](https://www.chartjs.org/)
 ### Backend
-- Momento Cache
-- Amazon EventBridge
-- AWS IAM
-- Amazon SES
-- AWS STS
-- Amazon DynamoDB
-- AWS Lambda
-- AWS LLRT
-- AWS CDK
-- Amazon API Gateway
-- Amazon CloudWatch
-- Amazon Cognito
+- [Momento Cache](https://www.gomomento.com/platform/cache/)
+- [Amazon EventBridge](https://aws.amazon.com/eventbridge/)
+- [AWS IAM](https://aws.amazon.com/iam/)
+- [Amazon SES](https://aws.amazon.com/ses/)
+- [AWS STS](https://docs.aws.amazon.com/iam/#sts) (Security Token Service)
+- [Amazon DynamoDB](https://aws.amazon.com/dynamodb/)
+- [AWS Lambda](https://aws.amazon.com/lambda/)
+- [AWS LLRT](https://github.com/awslabs/llrt)
+- [AWS CDK](https://aws.amazon.com/cdk/)
+- [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
+- [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/)
+- [Amazon Cognito](https://aws.amazon.com/cognito/)
 
 ## Use of Momento Cache
 We assume the role, and then we get the token of AWS credentials from STS for the source account (which we are using to send emails).
@@ -72,14 +72,19 @@ To authenticate users, we use custom attributes to assign their custom ID, sts r
 
 <img alt="Amazon Cognito" src="https://github.com/user-attachments/assets/1a2fc3a9-9284-46e9-aaea-52d1d24a3c6f" height="200px">
 
-
 When user tries to send email via us, we fetch the attributes from the user and then we generate the token based on account.\
 Then we store it in the Momento Cache.
 ## Usage of AWS CDK (Cloud Development Kit)
 CDK allows us to easily configure AWS Lambda and all the other services.
+
+<img alt="AWS CDK" src="https://github.com/user-attachments/assets/0fc3a1d5-fb9f-42bf-97df-a97ad12b1117" height="200px">
+
 All the AWS services have been configured via CDK, as it provides a configured way to manage all the AWS services.
 ## Why are we using AWS Amplify?
 We are logging and signing up our users via Amazon Cognito.
+
+<img alt="AWS Amplify" src="https://github.com/user-attachments/assets/597ca6eb-3965-4c37-afb1-5ba51c056eb5" height="200px">
+
 AWS Amplify SDK helps us with the hosting and static web app deployment of our SolidJS app.
 
 ## Using AWS LLRT, and not NodeJS
