@@ -31,26 +31,6 @@ These are features we all were quite missing (and what every SES user secretly w
 
 ![ses-account-dashboard-metrics](https://github.com/user-attachments/assets/d58b7283-9040-45ad-b324-7d64a8c6f2af)
 
-## Our motivation for building this
-
-For everyone who uses SES, SESami would make filtering emails by date-time, and drilling down via statuses; a tad bit easier.\
-We had two options:
-
-<img alt="the road not taken app meme" src="https://github.com/user-attachments/assets/e1560ca9-34d3-472d-9d80-a3b24d863395" height="300px">
-
-This is a multi-tenant app, which means you can have multiple users and AWS accounts.
-
-Here's an example where our app filters out the `DELIVERED` events by date and time, all sorted in descending order:
-
-![Filtering delivered events](https://github.com/user-attachments/assets/9333928f-e2bb-4123-8ea8-991a56367c45)
-
-It only needs 3 things from the user:
-- AWS account ID
-- IAM Role ARN
-- STS External ID (we'll supply this from our end)
-
-![AWS Settings](https://github.com/user-attachments/assets/0cfa1955-1bc0-4038-b3dc-3dc97c75efc5)
-
 ## Tech Stack
 ### Frontend
 - [SolidJS](https://www.solidjs.com/)
@@ -71,6 +51,26 @@ It only needs 3 things from the user:
 - [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
 - [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/)
 - [Amazon Cognito](https://aws.amazon.com/cognito/)
+
+## Our motivation for building this
+
+For everyone who uses SES, SESami would make filtering emails by date-time, and drilling down via statuses; a tad bit easier.\
+We had two options:
+
+<img alt="the road not taken app meme" src="https://github.com/user-attachments/assets/e1560ca9-34d3-472d-9d80-a3b24d863395" height="300px">
+
+This is a multi-tenant app, which means you can have multiple users and AWS accounts.
+
+Here's an example where our app filters out the `DELIVERED` events by date and time, all sorted in descending order:
+
+![Filtering delivered events](https://github.com/user-attachments/assets/9333928f-e2bb-4123-8ea8-991a56367c45)
+
+It only needs 3 things from the user:
+- AWS account ID
+- IAM Role ARN
+- STS External ID (we'll supply this from our end)
+
+![AWS Settings](https://github.com/user-attachments/assets/0cfa1955-1bc0-4038-b3dc-3dc97c75efc5)
 
 ## Our initial implementation
 Starting out, this is all we had in [Excalidraw](https://excalidraw.com/), when it came to designing UI &darr;
