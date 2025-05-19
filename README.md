@@ -1,32 +1,35 @@
-# SolidStart
+# SES Tracker UI
 
-Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
+The backend project is at [SES-Tracker-Backend](https://github.com/shivamJoker/ses-tracker-backend).
 
-## Creating a project
+### Frontend Tech Stack
+- SolidJS
+- SolidStart (meta framework)
+- AWS Amplify
+- TypeScript
+- ChartJS
 
-```bash
-# create a new project in the current directory
-npm init solid@latest
+## Preview
+- **Dashboard** - This is the dashboard for SESami (our SES Tracker friend).
+![ses-tracker-ui-dashboard](https://github.com/user-attachments/assets/e67cd2cd-d164-4d82-af64-187dc6397c9c)
 
-# create a new project in my-app
-npm init solid@latest my-app
-```
+- **SES Email Activity** - Here you can filter all your SES events via date range, or status:
+    - `OPENED`
+    - `CLICKED`
+    - `SENT`
+    - `DELIVERED`
+    - `BOUNCED`
+    - `COMPLAINED`
 
-## Developing
+![ses-email-activity](https://github.com/user-attachments/assets/962e8bb2-e036-4ddf-a759-1fad08c2f343)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- **Suppressed Users / Emails** - This list saves you from accidentally sending emails to users who don't want our emails.
 
-```bash
-npm run dev
+![suppressed-users](https://github.com/user-attachments/assets/c39bbccc-b5a7-46ef-bde9-f5f70b322bf8)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## About the frontend app
+This app is built using SolidJS.
+You can learn more at the [official website](https://start.solidjs.com).
 
 ## Building
-
-Solid apps are built with _presets_, which optimise your project for deployment to different environments.
-
 By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different preset, add it to the `devDependencies` in `package.json` and specify in your `app.config.js`.
-
-## This project was created with the [Solid CLI](https://solid-cli.netlify.app)
